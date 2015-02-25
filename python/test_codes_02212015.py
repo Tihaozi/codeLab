@@ -17,6 +17,47 @@ print x is y    # Identity Comparison
 var1 = 'hello'
 print var1[0]
 
+g = 'Green'
+t = 'Trees'
+print g + ' ' + t
+
+euro = unichr(8364)
+print euro
+
+print ord(euro)
+
+euro = u"\N{euro sign}"			# \N{name} Unicode character name
+print euro
+
+phrase = "The red balloon"
+phrase[:3]		# from 0 to 2
+phrase[-3:] 	# from -3 to end
+phrase[4:7] 	# 4, 5, 6
+
+p = "pad"
+p[1] = "o" # WRONG
+
+p = "pad"
+p = p[:1] + "o" + p[2:]
+print p 	# 'pod'
+
+p = "pad"
+p = "o".join((p[:1], p[2:]))
+print p 	# 'pod'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 '''
