@@ -1,4 +1,4 @@
-# Reverse Words Challenge
+# Lowercase Challenge
 
 
 if __name__ == "__main__":
@@ -7,6 +7,6 @@ if __name__ == "__main__":
         for line in f.readlines():
             if line is not None:
                 result = line.split(" ")
-                for i in result[::-1]:
-                    print i.strip(),
+                for i in result:
+                    print i.lower().strip(),
                 print ""
