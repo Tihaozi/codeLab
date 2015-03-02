@@ -545,10 +545,132 @@ finally:
     if fh:
         fh.close()
 
+
+# Classes and Modules
+class ClassName(base_classes):
+    suite
+
+
+class TestClass(object):
+    pass
+
+
+tc = TestClass()
+
+
+class Chair(object):
+    """This class represents chairs."""
+
+    def __init__(self, name, legs=4):
+        self.name = name
+        self.legs = legs
+
+
+chair1 = Chair("Barcelona")
+chair2 = Chair("Bar Stool", 1)
+
+
+class Rectangle(object):
+
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def getWidth(self):
+        return self.width
+
+    def setWidth(self, width):
+        self.width = width
+
+    def getHeight(self):
+        return self.height
+
+    def setHeight(self, height):
+        self.height = height
+
+    def area(self):
+        return self.getWidth() * self.getHeight()
+
+
+rect = Rectangle(50, 10)
+print rect.area()    # Prints "500"
+rect.setWidth(20)
+
+
+#Second Verison of Rectangle
+class Rectangle(object):
+
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def _area(self):
+        return self.width * self.height
+
+    area = property(fget=_area)
+
+
+rect = Rectangle(5, 4)
+print rect.width, rect.height, rect.area     # Prints (5, 4, 20)
+rect.width = 6
+
+
+# property()
+def _width(self):
+    return self.__width
+
+
+def _setWidth(self, width):
+    # Perform some computation
+    self.__width = width
+
+width = property(fget=_width, fset=_setWidth)
+
+
+# reimplementing __cmp__() method for Comparison
+def __cmp__(self, other):
+    if (self.width != other.width):
+        return cmp(self.width, other.width)
+    return cmp(self.height, other.height)
+
+
+# bool(rectA), or if rectB:
+def __nonzero__(self):
+    return self.width or self.height
+
+
+# eval()
+def __repr__(self):
+    return "Rectangle(%d, %d)" % (self.width, self.height)
+
+
+# Static Data, and Static Methods and Decorators
+class Balloon(object):
+
+    unique_colors = set()
+
+    def __init__(self, color):
+        self.color = color
+        Balloon.unique_colors.add(color)
+
+    @staticmethod
+    def uniqueColorCount():
+        return len(Balloon.unique_colors)
+
+    @staticmethod
+    def uniqueColors():
+        return Balloon.unique_colors.copy()
+
+"""
+def staticmethod(fn):
+    def wrapped():
+        pass
+    return wrapped
+"""
+
+
 # .......................................................
 # important for Decorators
-
-
 def makebold(fn):
     def wrapped():
         return "<b>" + fn() + "</b>"
