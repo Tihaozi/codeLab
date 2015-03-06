@@ -232,3 +232,116 @@ echo "Hello $fname, Lets be friend!"
 # Examples:
 ~$ date;who 
 
+# Why Command Line arguments required
+~$ vi demo
+#!/bin/sh
+#
+# Script that demos, command line args
+#
+echo "Total number of command line argument are $#"
+echo "$0 is script name"
+echo "$1 is first argument"
+echo "$2 is second argument"
+echo "All of them are :- $* or $@"
+
+# Run it as follows:
+~$ chmod 755 demo
+~$ ./demo
+
+
+# For showing content of a file
+~$ cat test_ls
+
+# Redirection of Standard output/input i.e. Input - Output redirection
+# For e.g.
+# $ ls command gives output to screen; to send output to file of ls command give command
+
+~$ ls > filename
+
+# There are three main redirection symbols >,>>,<
+# (1) > Redirector Symbol
+# Syntax:
+# Linux-command > filename
+# To output Linux-commands result (output of command or shell script) to file
+
+# (2) >> Redirector Symbol
+# Syntax:
+# Linux-command >> filename
+# To output Linux-commands result (output of command or shell script) to END of file.
+~$ date >> myfiles
+
+# (3) < Redirector Symbol
+# Syntax:
+# Linux-command < filename
+# To take input to Linux-command from file instead of key-board.
+$ cat < myfiles
+
+
+# other commands
+~$ cat > sname
+# vivek
+# ashish
+# zebra
+# babu
+# Press CTRL + D to save.
+
+~$ sort < sname > sorted_names
+~$ cat sorted_names
+
+# Try one more example to clear your idea:
+~$ tr "[a-z]" "[A-Z]" < sname > cap_names
+~$ cat cap_names
+# VIVEK
+# ASHISH
+# ZEBRA
+# BABU
+
+# tr command is used to translate all lower case characters to upper-case letters.
+
+
+# Pipes
+# A pipe is a way to connect the output of one program to the input of another program without any temporary file.
+
+# Pipe Defined as:
+# "A pipe is nothing but a temporary storage place where the output of one command is stored and then passed as the input for second command.
+# Pipes are used to run more than two commands ( Multiple commands) from same command line."
+
+# Syntax:
+# command1 | command2
+
+~$ ls | more								# Output of ls command is given as input to more command So that output is printed one screen full page at a time.
+~$ who | sort 							# Output of who command is given as input to sort command So that it will print sorted list of users
+~$ who | sort > user_list				# Same as above except output of sort is send to (redirected) user_list file
+~$ who | wc -l 							# Output of who command is given as input to wc command So that it will number of user who logon to system
+~$ ls -l | wc  -l   						# Output of ls command is given as input to wc command So that it will print number of files in current directory.
+~$ who | grep raju						# Output of who command is given as input to grep command So that it will print if particular user name if he is logon or nothing is printed (To see particular user is logon or not)
+
+# Filter
+# If a Linux command accepts its input from the standard input and produces its output on standard output is know as a filter. A filter performs some kind of process on the input and gives output. For e.g.. Suppose you have file called 'hotel.txt' with 100 lines data, And from 'hotel.txt' you would like to print contains from line number 20 to line number 30 and store this result to file called 'hlist' then give command:
+~$ tail +20 < hotel.txt | head -n30 >hlist
+
+# Here head command is filter which takes its input from tail command (tail command start selecting from line number 20 of given file i.e. hotel.txt) and passes this lines as input to head, whose output is redirected to 'hlist' file.
+
+# Consider one more following example
+~$ sort < sname | uniq > u_sname
+
+# Here uniq is filter which takes its input from sort command and passes this lines as input to uniq; Then uniqs output is redirected to "u_sname" file.
+
+# What is Processes
+# Process is kind of program or task carried out by your PC. For e.g.
+~$ ls -lR
+# ls command or a request to list files in a directory and all subdirectory in your current directory - It is a process.
+# Process defined as:
+# "A process is program (command given by user) to perform specific Job. In Linux when you start process, it gives a number to process (called PID or process-id), PID starts from 0 to 65535."
+
+
+# Why Process required
+# As You know Linux is multi-user, multitasking Os. It means you can run more than two process simultaneously if you wish. For e.g. To find how many files do you have on your system you may give command like:
+$ ls / -R | wc -l
+# This command will take lot of time to search all files on your system. So you can run such command in Background or simultaneously by giving command like
+$ ls / -R | wc -l &
+# The ampersand (&) at the end of command tells shells start process (ls / -R | wc -l) and run it in background takes next command immediately.
+# Process & PID defined as:
+# "An instance of running command is called process and the number printed by shell is called process-id (PID), this PID can be use to refer specific running process."
+
+
