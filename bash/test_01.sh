@@ -1,4 +1,7 @@
 # BASH ( Bourne-Again SHell )
+# ===========================================================================================
+# Chapter 1: Quick Introduction to Linux 
+
 # Tip: To find all available shells in your system type following command:
 ~$ cat /etc/shells
 # Result:
@@ -87,7 +90,9 @@ exit 0
 ~$ chmod 755 ginfo.sh
 ~$ ./ginfo.sh
 # ...................
-# ................................................................................................................
+
+# ==================================================================================
+# Chapter 2: Getting started with Shell Programming
 # Variables in Shell
 # In Linux (Shell), there are two types of variable:
 # (1) System variables - Created and maintained by Linux itself. This type of variable defined in CAPITAL LETTERS.
@@ -337,11 +342,86 @@ $ cat < myfiles
 
 # Why Process required
 # As You know Linux is multi-user, multitasking Os. It means you can run more than two process simultaneously if you wish. For e.g. To find how many files do you have on your system you may give command like:
-$ ls / -R | wc -l
+~$ ls / -R | wc -l
 # This command will take lot of time to search all files on your system. So you can run such command in Background or simultaneously by giving command like
-$ ls / -R | wc -l &
+~$ ls / -R | wc -l &
 # The ampersand (&) at the end of command tells shells start process (ls / -R | wc -l) and run it in background takes next command immediately.
 # Process & PID defined as:
 # "An instance of running command is called process and the number printed by shell is called process-id (PID), this PID can be use to refer specific running process."
 
 
+# ================================================================================
+# Chapter 3: Shells (bash) structured Language Constructs
+# Introduction
+# bc - Linux calculator program.
+~$ bc
+5 + 4
+# 9
+5 > 12
+5 == 10
+5 != 2
+5 == 5
+12 < 2
+
+# Value					Shown in bc as				Shown in Linux Shell as
+# True/Yes					1							0
+# False/No					0							Non - zero value
+
+# if condition
+# Syntax:
+
+# 	if condition
+# 	then
+# 		command1 if condition is true or if exit status
+# 		of condition is 0 (zero)
+# 		...
+# 		...
+# 	fi
+
+# Condition is defined as:
+# "Condition is nothing but comparison between two values."
+
+# Type following commands (assumes you have file called foo)
+~$ cat foo
+~$ echo $? 
+
+~$ cat > showfile
+#!/bin/sh
+#
+#Script to print file
+#
+if cat $1
+then
+echo -e "\n\nFile $1, found and successfully echoed"
+fi
+# ctrl+d for save
+
+# Run above script as:
+~$ chmod 755 showfile
+~$./showfile foo
+
+
+# test command or [ expr ]
+# test command or [ expr ] is used to see if an expression is true, and if it is true it return zero(0), otherwise returns nonzero for false.
+# Syntax:
+# test expression OR [ expression ]
+
+# Example:
+# Following script determine whether given argument number is positive.
+~$ cat > ispostive
+#!/bin/sh
+#
+# Script to see whether argument is positive
+#
+if test $1 -gt 0
+then
+echo "$1 number is positive"
+fi
+# ctrl+d for save
+
+# Run it as follows
+~$ chmod 755 ispostive
+~$ ./ispostive 5
+# 5 number is positive
+~$ ./ispostive -5
+# nothing is printed
