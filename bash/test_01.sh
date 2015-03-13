@@ -425,3 +425,37 @@ fi
 # 5 number is positive
 ~$ ./ispostive -5
 # nothing is printed
+
+~$ vi isnump_n
+#!/bin/sh
+#
+# Script to see whether argument is positive or negative
+#
+if [ $# -eq 0 ]
+then
+echo "$0 : You must give/supply one integers"
+exit 1
+fi
+
+
+if test $1 -gt 0
+then
+echo "$1 number is positive"
+else
+echo "$1 number is negative"
+fi
+
+# Try it as follows:
+~$ chmod 755 isnump_n
+
+~$ isnump_n 5
+# 5 number is positive
+
+~$ isnump_n -45
+# -45 number is negative
+
+~$ isnump_n
+# ./ispos_n : You must give/supply one integers
+
+~$ isnump_n 0
+# 0 number is negative
