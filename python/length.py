@@ -97,3 +97,9 @@ class Length(object):
 
     def __int__(self):
         return int(round(self.__amount))
+
+
+if __name__ == "__main__":
+    distance = Length("120 miles")
+    km = distance.to("km")
+    print km

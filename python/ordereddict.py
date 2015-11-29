@@ -101,3 +101,6 @@ class OrderedDict(object):
         for key in self.__keys:
             pieces.append("%r: %r" % (key, self.__dict[key]))
         return "OrderedDict({%s})" % ", ".join(pieces)
+
+if __name__ == "__main__":
+    pass
