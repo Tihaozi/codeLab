@@ -19,6 +19,8 @@ from functools import partial
 # function STUDY: lambda
 clear_cmd = "cls" if os.name == "nt" else "clear"
 cls = lambda: subprocess.call(clear_cmd, shell=True)
+# for calling --> cls()
+
 # example:
 def printMsg(msg):
     print msg
@@ -34,7 +36,7 @@ class MyClassCommand(object):
 
 myCls = MyClassCommand()  
 # myCls.__name__          # give error
-# print MyClassCommand.__name__  # MyClass
+# print MyClassCommand.__name__  # MyClassCommand
 
 class My1Command(MyClassCommand):
     pass
@@ -108,6 +110,7 @@ print '***', COMMANDS.get(cmd)
 # ===============================================
 class Invoker1(object):
     """Using @classmethod"""
+    # Static Data
     CONSTANT = {}
     CONSTANT['madoodia'] = 'Baran'
 
@@ -139,7 +142,7 @@ print __file__
 
 # ===============================================
 
-cls()
+# cls()
 try:
     while True:
         sys.stdout.write("Command> ")
