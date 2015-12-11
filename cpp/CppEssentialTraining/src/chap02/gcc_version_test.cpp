@@ -1,4 +1,5 @@
 // version_test.cpp
+// author: madoodia@gmail.com
 
 #include <iostream>
 #include <sstream>
@@ -15,10 +16,10 @@ int main(int argc, char **argv)
 
 	cout << version.str() << endl;
 
-//	 vector<string> v = { "one", "two", "three" }; // C++11 feature - initializer list
-//	 for (string s : v) { // C++11 feature - range-based for loop
-//	 	cout << s << endl;
-//	 }
+/*	 vector<string> v = { "one", "two", "three" }; // C++11 feature - initializer list
+	 for (string s : v) { // C++11 feature - range-based for loop
+	 	cout << s << endl;
+	 }*/
 
 	return 0;
 }

@@ -1,4 +1,5 @@
 // c99.c
+// author: madoodia@gmail.com
 
 #include <stdio.h>
 
