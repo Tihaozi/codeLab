@@ -1,10 +1,11 @@
-// hello.c
+// working.c
 // author: madoodia@gmail.com
 
 #include <stdio.h>
 
 int main(int argc, char **argv)
 {
-	printf("Hello World!\n");
+	fprintf(stdout, "Hello World!\n");
+	fprintf(stderr, "This is an Error\n");
 	return 0;
 }
