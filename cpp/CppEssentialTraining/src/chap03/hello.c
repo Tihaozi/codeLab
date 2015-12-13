@@ -1,13 +1,10 @@
-// c99.c
+// hello.c
 // author: madoodia@gmail.com
 
 #include <stdio.h>
 
 int main(int argc, char **argv)
 {
-	puts("C99 Version: ");
-	for(int i=0;argv[i];i++){
-		printf("%d: %s\n", i, argv[i]);
-	}
+	printf("Hello World!\n");
 	return 0;
 }

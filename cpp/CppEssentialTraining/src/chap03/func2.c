@@ -1,13 +1,16 @@
-// c99.c
+
+// func2.c
 // author: madoodia@gmail.com
 
 #include <stdio.h>
+#include "func2.h"
+
+int i = 85;
 
 int main(int argc, char **argv)
 {
-	puts("C99 Version: ");
-	for(int i=0;argv[i];i++){
-		printf("%d: %s\n", i, argv[i]);
-	}
+	printf("i is %d\n", i);
+	func2();
 	return 0;
 }
+

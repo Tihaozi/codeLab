@@ -1,3 +1,6 @@
 eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1550013669/RF_2015_PATH/delimiter=;
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1550013669/RF_2015_PATH/operation=replace
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1550013669/RF_2015_PATH/value=${RF_2015_PATH}\\sdk\\include;
 environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1550013669/append=true
 environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1550013669/appendContributed=true

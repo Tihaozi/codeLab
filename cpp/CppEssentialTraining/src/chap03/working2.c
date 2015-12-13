@@ -1,13 +1,12 @@
-// c99.c
+// working.c
 // author: madoodia@gmail.com
 
 #include <stdio.h>
 
 int main(int argc, char **argv)
 {
-	puts("C99 Version: ");
-	for(int i=0;argv[i];i++){
-		printf("%d: %s\n", i, argv[i]);
-	}
+	int i = 7;
+	char * s = "Hello World!\n";
+	printf(s);
 	return 0;
 }
