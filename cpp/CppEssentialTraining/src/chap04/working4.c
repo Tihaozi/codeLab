@@ -1,26 +1,20 @@
 // working.c
 // author: madoodia@gmail.com
 
-// Confusing program because we used macro
-
 #include <stdio.h>
-
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-
-int increment()
-{
-	static int i = 42;
-	i += 5;
-	printf("increment returns %d\n", i);
-	return i;
-}
 
 int main(int argc, char **argv)
 {
-	int x = 50;
-	printf("max of %d and %d is %d\n",
-			x, increment(), MAX(x, increment()));
-	printf("max of %d and %d is %d\n",
-			x, increment(), MAX(x, increment()));
+	char s[] = {'s', 't', 'r', 'i', 'n', 'g', 0};
+//	char s[] = "string";
+	printf("string is %s\n", s);
+
+	for(int i=0; s[i] != 0;i++){
+		printf("char is: %c\n", s[i]);
+	}
+	printf("\n");
+	for(char *cp = s; *cp; ++cp){
+		printf("char is: %c\n", *cp);
+	}
 	return 0;
 }
