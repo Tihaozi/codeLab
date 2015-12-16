@@ -6,6 +6,8 @@ using namespace std;
 
 int main()
 {
-	cout << "Welcome to the Advanced Programming Course" << endl;
+	string s = "String";
+	int i = 5;
+	printf("value is %c\n", s[i]);
 	return 0;
 }
