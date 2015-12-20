@@ -99,7 +99,9 @@ class Length(object):
         return int(round(self.__amount))
 
 
+# will be run if you execute the module not import it
 if __name__ == "__main__":
     distance = Length("120 miles")
     km = distance.to("km")
     print km
+    print Length.units()

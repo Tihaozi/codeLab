@@ -21,7 +21,7 @@ class Student(object):
 # s3 = Student()
 # print Student.count()
 
-
+# print "-" * 30 + "\n"
 
 class TestDec(object):
 
@@ -30,8 +30,10 @@ class TestDec(object):
     def __init__(self):
         super(TestDec, self).__init__()
 
-    def logger(self):
-        print "here we are\n"
+    def logger(self, *fn):
+        def wrapped():
+            return "here is logger" + fn()
+        return wrapped
 
     @logger
     def count(self):
@@ -39,3 +41,25 @@ class TestDec(object):
 
 td = TestDec()
 td.count()
+
+# ----------------------------------
+# sample for using decorator
+# important for Decorators
+def makebold(fn):
+    def wrapped():
+        return "<b>" + fn() + "</b>"
+    return wrapped
+
+
+def makeitalic(fn):
+    def wrapped():
+        return "<i>" + fn() + "</i>"
+    return wrapped
+
+
+@makebold
+@makeitalic
+def hello():
+    return "hello world"
+
+# print hello()  # returns <b><i>hello world</i></b>
