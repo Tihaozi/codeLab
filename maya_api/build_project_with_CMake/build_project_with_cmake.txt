@@ -1,0 +1,8 @@
+prerequistics:
+installed visual studio
+installed CMake
+------------
+after creating build folder beside src folder, go to build folder in CMD:
+and run this code:
+cmake -G "Visual Studio 12 2015" ../src
+built project now is in build folder, you can run .sln file and debug or release it in visual studio
