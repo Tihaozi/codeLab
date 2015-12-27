@@ -13,6 +13,6 @@ TARGET = first_project
 
 
 SOURCES += main.cpp
-#SOURCES += widget.cpp
+SOURCES += widget.cpp
 
-#HEADERS  +=widget.h
+HEADERS  +=widget.h
