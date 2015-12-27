@@ -30,19 +30,19 @@ bool CommandPluginWithArgs::isUndoable() const
 
 MStatus CommandPluginWithArgs::doIt(const MArgList& argList)
 {
-	MGlobal::displayError("here1");
+	MStatus status;
+	// MGlobal::displayError("here1");
 	parseArgs(argList);
-	MGlobal::displayError("here2");
 	if (sparse != NULL) {
-		MGlobal::displayError("here3");
 		redoIt();
-		MGlobal::displayError("here4");
 	}
+	CHECK_MSTATUS_AND_RETURN_IT(status);
 	return MS::kSuccess;
 }
 
 MStatus CommandPluginWithArgs::redoIt()
 {
+	MStatus status;
 	MString msg;
 	MSelectionList mSel;
 	MDagPath mDagPath;
@@ -65,6 +65,7 @@ MStatus CommandPluginWithArgs::redoIt()
 		MGlobal::displayError("Select a Poly mesh");
 		return MS::kUnknownParameter;
 	}
+
 	MPointArray mPointArray;
 	mFnMesh.getPoints(mPointArray, MSpace::kWorld);
 	MFnParticleSystem mFnParticle;
@@ -78,16 +79,19 @@ MStatus CommandPluginWithArgs::redoIt()
 	msg = "Total Points: " + counter;
 	MGlobal::displayInfo(msg);
 	mFnParticle.saveInitialState();
-
+	
+	CHECK_MSTATUS_AND_RETURN_IT(status);
 	return MS::kSuccess;
 }
 
 MStatus CommandPluginWithArgs::undoIt()
 {
+	MStatus status;
 	MFnDagNode mFnDagNode(mObjParticle);
 	MDagModifier mDagMod;
 	mDagMod.deleteNode(mFnDagNode.parent(0));
 	mDagMod.doIt();
+	CHECK_MSTATUS_AND_RETURN_IT(status);
 	return MS::kSuccess;
 }
 
@@ -106,6 +110,7 @@ MSyntax CommandPluginWithArgs::newSyntax()
 
 MStatus CommandPluginWithArgs::parseArgs(const MArgList& argList)
 {
+	MStatus status;
 	MArgDatabase parsedArguments(syntax(), argList);
 	if (parsedArguments.isFlagSet(kSparseFlag)) {
 		sparse = parsedArguments.flagArgumentDouble(kSparseFlag, 0);

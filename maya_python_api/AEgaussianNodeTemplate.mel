@@ -1,0 +1,29 @@
+// AEgaussianNodeTemplate.mel
+// Name of the main function (AEgaussianNodeTemplate) and mane of the file is created in this way:
+// AE[NAME_OF_NODE_IN_REGISTERNODE_ININITIALIZEPLUGIN]Template
+
+global proc AEgaussianNodeTemplate( string $nodeName ){
+	// put our attribute into a scrolled layout field
+	editorTemplate -beginScrollLayout;
+	
+		// the all go into the collapsable "Parameters" action
+		editorTemplate -beginLayout "Parameters" -collapse false;
+
+			editorTemplate -addControl "inValue";
+			editorTemplate -addControl "magnitude";
+			editorTemplate -addControl "mean";
+			editorTemplate -addControl "variance";
+
+		editorTemplate -endLayout;
+
+		editorTemplate -addExtraControls;
+
+	editorTemplate -endScrollLayout;
+
+	editorTemplate -suppress "inputTranslate";
+	editorTemplate -suppress "input";
+	editorTemplate -suppress "caching";
+	editorTemplate -suppress "nodeState";
+	editorTemplate -suppress "frozen";
+
+}

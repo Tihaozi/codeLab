@@ -3,11 +3,9 @@
 #ifndef CMDPLGWITHARGS_H
 #define CMDPLGWITHARGS_H
 
-#include <cmath>
-
 #include <maya/MPxCommand.h>
-#include <maya/MArgList.h>
-#include <maya/MSyntax.h>
+// #include <maya/MArgList.h> // Forwarded Declaration
+#include <maya/MSyntax.h> // Forwarded Declaration
 #include <maya/MSelectionList.h>
 #include <maya/MFnDagNode.h>
 #include <maya/MObject.h>
@@ -19,6 +17,7 @@
 #include <maya/MFnParticleSystem.h>
 #include <maya/MArgDatabase.h>
 
+#include <math.h>
 
 class CommandPluginWithArgs : public MPxCommand {
 
@@ -35,9 +34,8 @@ public:
 
 	static void*	creator();
 	static MSyntax	newSyntax();
-
-private:
 	MStatus			parseArgs(const MArgList& argList);
+
 	MObject			mObjParticle;
 };
 

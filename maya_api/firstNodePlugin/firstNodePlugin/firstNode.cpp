@@ -69,7 +69,7 @@ MStatus FirstNode::compute(const MPlug& plug, MDataBlock& data)
 	float magnitude = data.inputValue(aMagnitude, &status).asFloat();
 	float mean = data.inputValue(aMean, &status).asFloat();
 	float variance = data.inputValue(aVariance, &status).asFloat();
-	if (variance <+ 0.0f) {
+	if (variance <= 0.0f) {
 		variance = 0.001f;
 	}
 
