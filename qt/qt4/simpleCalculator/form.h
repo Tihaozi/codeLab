@@ -17,10 +17,9 @@ public slots:
     void updateUi();
 
 private:
+    QVBoxLayout *layout;
     QTextBrowser *browser;
     QLineEdit *lineEdit;
-
-
 };
 
 #endif // FORM_H

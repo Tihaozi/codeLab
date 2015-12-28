@@ -3,7 +3,7 @@
 
 Form::Form(QWidget *parent) : QDialog(parent)
 {
-    QVBoxLayout *layout = new QVBoxLayout;
+    layout = new QVBoxLayout;
 
     lineEdit = new QLineEdit;
     browser = new QTextBrowser;
@@ -20,21 +20,16 @@ Form::Form(QWidget *parent) : QDialog(parent)
 
     setWindowTitle(tr("Calculator"));
     setLayout(layout);
-
 }
 
 Form::~Form()
 {
+    delete lineEdit;
+    delete browser;
 }
 
 void Form::updateUi()
 {
-//    string text = "";
-//    try {
-//        text = lineEdit.text();
-//        browser.append("%s = <b>%s</b>", (text, ));
-//    } catch {
-
-//    }
-    std::cout << "clicked" << std::endl;
+    QString text = lineEdit->text();
+    browser->append(QString("%1 = <b>%2</b>").arg(text).arg(text));
 }
