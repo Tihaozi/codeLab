@@ -11,8 +11,6 @@
 
 using namespace std;
 
-int counter = 0;
-
 double CommandPluginWithArgs::sparse = NULL;
 
 CommandPluginWithArgs::CommandPluginWithArgs()
@@ -31,10 +29,10 @@ bool CommandPluginWithArgs::isUndoable() const
 MStatus CommandPluginWithArgs::doIt(const MArgList& argList)
 {
 	MStatus status;
-	// MGlobal::displayError("here1");
-	parseArgs(argList);
-	if (sparse != NULL) {
+	status = parseArgs(argList);
+	if (status == MS::kSuccess) {
 		redoIt();
+
 	}
 	CHECK_MSTATUS_AND_RETURN_IT(status);
 	return MS::kSuccess;
@@ -42,8 +40,10 @@ MStatus CommandPluginWithArgs::doIt(const MArgList& argList)
 
 MStatus CommandPluginWithArgs::redoIt()
 {
+	int counter = 0;
+
 	MStatus status;
-	MString msg;
+	MString msg, info;
 	MSelectionList mSel;
 	MDagPath mDagPath;
 	MFnMesh mFnMesh;
@@ -65,18 +65,24 @@ MStatus CommandPluginWithArgs::redoIt()
 		MGlobal::displayError("Select a Poly mesh");
 		return MS::kUnknownParameter;
 	}
-
 	MPointArray mPointArray;
 	mFnMesh.getPoints(mPointArray, MSpace::kWorld);
+
 	MFnParticleSystem mFnParticle;
 	mObjParticle = mFnParticle.create();
+	// For fix the maya bug
+	mFnParticle.setObject(mObjParticle);
+
 	for (int i = 0; i < mPointArray.length();i++) {
-		if (fmod(i, sparse) == 0) {
+		if (fmod(i, CommandPluginWithArgs::sparse) == 0) {
 			mFnParticle.emit(mPointArray[i]);
+			//info = i;
+			//MGlobal::displayInfo(info);
 			counter += 1;
 		}
 	}
-	msg = "Total Points: " + counter;
+	msg = "Total Points: ";
+	msg += counter;
 	MGlobal::displayInfo(msg);
 	mFnParticle.saveInitialState();
 	
@@ -110,22 +116,25 @@ MSyntax CommandPluginWithArgs::newSyntax()
 
 MStatus CommandPluginWithArgs::parseArgs(const MArgList& argList)
 {
-	MStatus status;
-	MArgDatabase parsedArguments(syntax(), argList);
-	if (parsedArguments.isFlagSet(kSparseFlag)) {
-		sparse = parsedArguments.flagArgumentDouble(kSparseFlag, 0);
+	MStatus status = MS::kSuccess;
+	MString msg;
+	// For fix the maya bug
+	// this will work in python api with MArgDatabase instead MArgParser
+	MArgParser argData(syntax(), argList, &status);
+	if (argData.isFlagSet(kSparseFlag)) {
+		CommandPluginWithArgs::sparse = argData.flagArgumentDouble(kSparseFlag, 0);
 		return MS::kSuccess;
 	}
-	if (parsedArguments.isFlagSet(kSparseLongFlag)) {
-		sparse = parsedArguments.flagArgumentDouble(kSparseLongFlag, 0);
+	if (argData.isFlagSet(kSparseLongFlag)) {
+		CommandPluginWithArgs::sparse = argData.flagArgumentDouble(kSparseLongFlag, 0);
 		return MS::kSuccess;
 	}
 
-	if (parsedArguments.isFlagSet(kHelpFlag)) {
+	if (argData.isFlagSet(kHelpFlag)) {
 		setResult(helpMessage);
 		return MS::kSuccess;
 	}
-	if (parsedArguments.isFlagSet(kHelpLongFlag)) {
+	if (argData.isFlagSet(kHelpLongFlag)) {
 		setResult(helpMessage);
 		return MS::kSuccess;
 	}

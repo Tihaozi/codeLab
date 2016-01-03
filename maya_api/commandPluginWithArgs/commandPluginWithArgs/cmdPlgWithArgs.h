@@ -15,7 +15,7 @@
 #include <maya/MGlobal.h>
 #include <maya/MPointArray.h>
 #include <maya/MFnParticleSystem.h>
-#include <maya/MArgDatabase.h>
+#include <maya/MArgParser.h>
 
 #include <math.h>
 
