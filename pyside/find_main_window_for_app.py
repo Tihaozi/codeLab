@@ -17,6 +17,7 @@ class Window(QDialog):
         self.resize(400, 400)
 
 
+# there is some problem with this method that should be solved
 def getMainWindow():
     mainWindow = QApplication.activeWindow()
     while True:
