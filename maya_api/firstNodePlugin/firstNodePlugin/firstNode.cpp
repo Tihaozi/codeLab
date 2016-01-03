@@ -2,7 +2,7 @@
 
 #include "firstNode.h"
 
-MTypeId		FirstNode::id(0x00000231);
+MTypeId		FirstNode::id(0x00000232);
 MObject		FirstNode::aOutValue;
 MObject		FirstNode::aInValue;
 MObject		FirstNode::aMagnitude;
@@ -27,30 +27,34 @@ MStatus FirstNode::initialize()
 	MStatus status;
 	MFnNumericAttribute nAttr;
 
-	aOutValue = nAttr.create("outValue", "outValue", MFnNumericData::kFloat);
+	FirstNode::aOutValue = nAttr.create("outValue", "outValue", MFnNumericData::kFloat, 0.0, &status);
 	nAttr.setWritable(false);
 	nAttr.setStorable(false);
-	addAttribute(aOutValue);
 
-	aInValue = nAttr.create("inValue", "inValue", MFnNumericData::kFloat);
+	FirstNode::aInValue = nAttr.create("inValue", "inValue", MFnNumericData::kFloat);
 	nAttr.setKeyable(true);
-	addAttribute(aInValue);
-	attributeAffects(aInValue, aOutValue);
 
-	aMagnitude = nAttr.create("magnitude", "magnitude", MFnNumericData::kFloat);
+	FirstNode::aMagnitude = nAttr.create("magnitude", "magnitude", MFnNumericData::kFloat);
 	nAttr.setKeyable(true);
-	addAttribute(aMagnitude);
-	attributeAffects(aMagnitude, aOutValue);
 
-	aMean = nAttr.create("mean", "mean", MFnNumericData::kFloat);
+	FirstNode::aMean = nAttr.create("mean", "mean", MFnNumericData::kFloat);
 	nAttr.setKeyable(true);
-	addAttribute(aMean);
-	attributeAffects(aMean, aOutValue);
 
-	aVariance = nAttr.create("variance", "variance", MFnNumericData::kFloat);
+	FirstNode::aVariance = nAttr.create("variance", "variance", MFnNumericData::kFloat);
 	nAttr.setKeyable(true);
-	addAttribute(aVariance);
-	attributeAffects(aVariance, aOutValue);
+
+	addAttribute(FirstNode::aOutValue);
+	addAttribute(FirstNode::aInValue);
+	addAttribute(FirstNode::aMagnitude);
+	addAttribute(FirstNode::aMean);
+	addAttribute(FirstNode::aVariance);
+
+	status = attributeAffects(FirstNode::aInValue, FirstNode::aOutValue);
+	status = attributeAffects(FirstNode::aMagnitude, FirstNode::aOutValue);
+	status = attributeAffects(FirstNode::aMean, FirstNode::aOutValue);
+	status = attributeAffects(FirstNode::aVariance, FirstNode::aOutValue);	
+	
+	//McheckErr(status, "ERROR in attributeAffects\n");
 
 	return MS::kSuccess;
 }

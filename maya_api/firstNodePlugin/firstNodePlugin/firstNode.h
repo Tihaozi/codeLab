@@ -9,6 +9,13 @@
 
 #include <math.h>
 
+// A macro for detecting errors
+#define McheckErr(stat,msg)			\
+	if (stat != MS::kSuccess) {		\
+		cerr << msg;				\
+		return MS::kFailure;		\
+	}
+
 class FirstNode : public MPxNode {
 
 public:
