@@ -6,13 +6,14 @@
 
 #include <maya/MPxNode.h>
 #include <maya/MFnNumericAttribute.h>
+#include <maya/MGlobal.h>
 
 #include <math.h>
 
 // A macro for detecting errors
-#define McheckErr(stat,msg)			\
+#define McheckErr(stat, msg)			\
 	if (stat != MS::kSuccess) {		\
-		cerr << msg;				\
+		MGlobal::displayError(msg);				\
 		return MS::kFailure;		\
 	}
 

@@ -9,13 +9,9 @@ MObject		FirstNode::aMagnitude;
 MObject		FirstNode::aMean;
 MObject		FirstNode::aVariance;
 
-FirstNode::FirstNode()
-{
-}
+FirstNode::FirstNode(){}
 
-FirstNode::~FirstNode()
-{
-}
+FirstNode::~FirstNode(){}
 
 void* FirstNode::creator()
 {
