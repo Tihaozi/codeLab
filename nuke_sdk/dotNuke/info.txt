@@ -1,0 +1,12 @@
+for edit preferences of nuke you can work in this way: (E:\Madoodia\_dotNuke)
+in windows:
+
+- create these files: __init__.py , menu.py in the current directory
+	look at inside of files
+- create any folder beside these files (icons, python, gizmos)
+- create __init__.py inside python folder
+- put png files as icons in icons folder
+- put .gizmo files in gizmos folder
+- add the current dir to NUKE_PATH
+
+note: if you write any code in mmenu.py will run in nuke
