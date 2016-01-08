@@ -79,6 +79,8 @@ command = my_menu.addCommand('Test Giz', 'nuke.createNode("TestGiz")', icon='tar
 
 
 
-
+# ------------------------------------------------------------- #
+import renders
+nuke.knobDefault('Write.afterRender', 'renders.finish()')
 
 

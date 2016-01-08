@@ -74,7 +74,7 @@ for node in nodes:
 
 nuke.createNode('Blur')
 nuke.createNode('Blur').knob('size').setValue(12)
-  
+
 n = nuke.createNode('Blur')
 n.knob('size').setValue(120)
 n.knob('label').setValue('My Label')
@@ -85,7 +85,7 @@ nuke.delete(n)
 
 nuke.delete(nuke.toNode('Blur1'))
 
-nukescripts.node_delete()  	# delete selected node
+nukescripts.node_delete()   # delete selected node
 
 
 # this line will create a complete group
@@ -132,7 +132,6 @@ m1.setInput(1, b1)
 m1.setInput(0, g1)
 
 
-
 # -----------------------------------
 # Session 05
 
@@ -158,7 +157,8 @@ import outside_scripts
 nuke.root().knob('format').setValue('FullHD')
 
 # modify luts from root
-nuke.root().knob('luts').addCurve('pLuts', '{pow(10.0, ((t - 0.616596 - 0.03) /0.432699)) - 0.037584}')
+nuke.root().knob('luts').addCurve(
+    'pLuts', '{pow(10.0, ((t - 0.616596 - 0.03) /0.432699)) - 0.037584}')
 # sine: sin(frequency * frequencyMultiplier) * amplitude + offset
 nuke.root().knob('luts').addCurve('sineLuts', '{sin(t * 1) * 1 + 0}')
 nuke.root().knob('luts').addCurve('sineLuts', '{sin(t * 2) * 5 + 0}')
@@ -173,11 +173,13 @@ nuke.root().knob('luts').editCurve('sineLuts', '{sin(t * 0.5) * 2 + 0}')
 # in menu.py:
 nuke.menu('Nodes').findItem('Channel/Shuffle').setShortcut('ctrl+shift+alt+j')
 
-nuke.menu('Nodes').addCommand('Channel/Shuffle', 'nuke.createNode("Shuffle")', 'ctrl+shift+alt+j', icon='shuffle_d.png')
+nuke.menu('Nodes').addCommand('Channel/Shuffle',
+                              'nuke.createNode("Shuffle")', 'ctrl+shift+alt+j', icon='shuffle_d.png')
 # nuke.menu('Nodes').findItem('Channel').findItem('Shuffle').setIcon(shuffleIcon_file)
 
 # voiceIcon_file = current_dir + r"\icons\voice_d.png"
-nuke.menu('Nodes').addCommand('Channel/Voice', 'print "This is A Voice!"', 'ctrl+shift+alt+v', icon='voice_d.png')
+nuke.menu('Nodes').addCommand('Channel/Voice',
+                              'print "This is A Voice!"', 'ctrl+shift+alt+v', icon='voice_d.png')
 # nuke.menu('Nodes').findItem('Channel/Voice').setIcon(voiceIcon_file)
 
 
@@ -191,9 +193,12 @@ nuke.menu('Nodes').addCommand('Channel/Voice', 'print "This is A Voice!"', 'ctrl
 # work with menus:
 # main menu ('Nuke')
 
-nuke.menu('Nuke').findItem('Edit/Node').addCommand('myMenuElement', 'print "This is a command from Main Menu"', 'ctrl+alt+m')
-nuke.menu('Nuke').addCommand('madoodia/Print Me', 'print "This is a command from Main Menu"', 'ctrl+alt+n')
-nuke.menu('Nuke').addCommand('madoodia/Print From Outside', 'outside_scripts.print_words()')
+nuke.menu('Nuke').findItem('Edit/Node').addCommand('myMenuElement',
+                                                   'print "This is a command from Main Menu"', 'ctrl+alt+m')
+nuke.menu('Nuke').addCommand(
+    'madoodia/Print Me', 'print "This is a command from Main Menu"', 'ctrl+alt+n')
+nuke.menu('Nuke').addCommand(
+    'madoodia/Print From Outside', 'outside_scripts.print_words()')
 
 # Add new toolbar button with submenu
 toolbar = nuke.menu('Nodes')
@@ -202,7 +207,8 @@ madoodiaIcon_file = current_dir + r"\icons\target_l.png"
 my_menu.setIcon(madoodiaIcon_file)
 
 
-command = my_menu.addCommand('EdgeMatte', 'nuke.createNode("EdgeMatte")', icon='world_d.png')
+command = my_menu.addCommand(
+    'EdgeMatte', 'nuke.createNode("EdgeMatte")', icon='world_d.png')
 
 
 # -----------------------------------
@@ -247,7 +253,7 @@ print sys.platform
 print time.localtime()
 
 myStr = "Hello this is our world"
-print re.split(' ',myStr)
+print re.split(' ', myStr)
 
 print random.random() + 1
 
@@ -294,5 +300,63 @@ n.addknob(k)
 nuke.createNode('Blur', inpanel=Flase)
 
 # -----------------------------------
+# session 07
+# Callbacks
+
+nuke.addCallback(callable, args=(), kwargs={}, nodeClass='*')
+nuke.addOnCreate(
+    nuke.message, args=('OK, you have created a write node'), nodeClass='Write')
+# addOnScriptLoad(...)
+# addKnobChanged(...)
+# inside python custom:
+nuke.thisNode().knob('knobChanged').setValue('print "Hello World!"')
+# or
+n = nuke.createNode('NoOp')
+n.knob('knobChanged').setValue('print "Hello World!"')
+
+# inside the python custom of a node:
+# there is a checkBox knob  c
+# there is a float knob     f
+# and a python custom       kn (should not be hide)
+# and a pulldown knob       p
+nuke.thisNode().knob('knobChanged').setValue("""
+c = nuke.thisNode().knob('c').getValue()
+f = nuke.thisNode().knob('f')
+p = nuke.thisNode().knob('p')
+
+# Enable/Disable with checkBox
+if c == True:
+    f.setEnabled(True)
+    p.setEnabled(True)
+else:
+    f.setEnabled(False)
+    p.setEnabled(False)
+
+# preset
+if p.getValue() == 0:
+    f.setValue(0.1)
+elif p.getValue() == 1:
+    f.setValue(0.9)
+elif p.getValue() == 2:
+    f.setValue(1.0)
+else:
+    pass
+""")
+
+# -------------------------------------------------- #
+# Callbacks in BEFOR RENDERING part
+# create a renders.py file
+import nuke
+
+def finish():
+    nuke.message('your render has finished')
+
+# now in menu.py this should be set 
+import renders
+nuke.knobDefault('Write.afterRender', 'renders.finish()')
+
+# -------------------------------------------------- #
+
+
 # -----------------------------------
 # -----------------------------------
