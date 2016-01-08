@@ -19,6 +19,7 @@
 #include <rf_sdk/daemons/daemonplgsdk.h>
 #include <rf_sdk/sdk/rfsdklibdefs.h>
 #include <rf_sdk/sdk/sdkversion.h>
+#include <rf_sdk/sdk/mutex.h>
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +39,14 @@ class FirstExerciseDaemonSDK : public DaemonPlgSdk
 		FORCE_QUADRATIC_INC
 	};
 
+	Mutex threadLock;
+
 public:
+
+	int timesBeingCalled;
+	int localID;
+
+	static int globalLocalID;
 
 	/// Constructor.
 	FirstExerciseDaemonSDK()
@@ -60,27 +68,27 @@ public:
 	};
 
 	/// Get plugin name.
-	virtual std::string getNameId() const
+	virtual string getNameId() const
 	{
 		return ("FirstExercise");
 	};
 
 	// getCopyRight()
-	virtual std::string getCopyRight() const
+	virtual string getCopyRight() const
 	{
-		return std::string("Copyright (C) 2016 [madoodia.com]. All rights reserved.");
+		return string("Copyright (C) 2016 [madoodia.com]. All rights reserved.");
 	}
 
 	// getLongDescription()
-	virtual std::string getLongDescription() const
+	virtual string getLongDescription() const
 	{
-		return std::string("Adds a constant force in a certain direction.");
+		return string("Adds a constant force in a certain direction.");
 	}
 
 	// getShortDescription()
-	virtual std::string getShortDescription() const
+	virtual string getShortDescription() const
 	{
-		return std::string("Adds Constant Force");
+		return string("Adds Constant Force");
 	}
 
 	/// Initialize plugin, add properties, etc.
@@ -95,14 +103,19 @@ public:
 		Ppty fDir = Ppty::createPpty("FDir", Vector(1.0, 1.0, 0.0));
 		plgDesc->addPpty(fDir);
 
+		// Task A2: (vector property) ------------------
+		Ppty vStrength = Ppty::createPpty("VStrength", 2.0f);
+		plgDesc->addPpty(vStrength);
+		//----------------------------------------------
+
 
 		// list property
-		std::vector<std::string> lstNames;
+		vector<string> lstNames;
 		lstNames.push_back("Constant");
 		lstNames.push_back("LinearInc");
 		lstNames.push_back("QuadraticInc");
 
-		std::vector<int> lstValues;
+		vector<int> lstValues;
 		lstValues.push_back(FORCE_CONST);
 		lstValues.push_back(FORCE_LINEAR_INC);
 		lstValues.push_back(FORCE_QUADRATIC_INC);
@@ -116,12 +129,18 @@ public:
 		applyForceToEmitter(thisPlg, emitter, 0, iter);
 	}
 
+
+	// Is multithreading (No need to imlement here because while (iter.hasNext())
+	// will create threading
+	//virtual bool isMT(void) const { return NL_true; };
+
 	//--------------------------------------------------
 	//  Function: applyForceToEmitter 
 	//  This function is called by the simulation engine 
 	//  when external forces should be applied to the    
-	//  particles in the emitter.                        
+	//  particles in the emitter.
 	//--------------------------------------------------
+
 	virtual void applyForceToEmitter(Daemon* thisPlg, PB_Emitter* emitter, int nThread, PB_Emitter::iterator iter)
 	{
 		Scene& scene = AppManager::instance()->getCurrentScene();
@@ -132,45 +151,69 @@ public:
 		// Current time
 		float currTime = scene.getCurrentTime();
 
-		float currFtrength = fstrength;
+		float currFStrength = fstrength;
 
 		switch (forceType)
 		{
 		case FORCE_CONST:
-			currFtrength = fstrength;
+			currFStrength = fstrength;
 			break;
 
 		case FORCE_LINEAR_INC:
-			currFtrength = fstrength * currTime;
+			currFStrength = fstrength * currTime;
 			break;
 
 		case FORCE_QUADRATIC_INC:
-			currFtrength = fstrength * currTime * currTime;
+			currFStrength = fstrength * currTime * currTime;
 			break;
 		}
 
 
 		Vector fDir = thisPlg->getParameter<Vector>("FDir");
 
-		fDir.normalize();
-		fDir.scale(currFtrength);
+		if (fDir.module() != 0) {
+			fDir.normalize(); //NB RF might crash if Fdir is (0,0,0). I usually check the size first.
+			fDir.scale(currFStrength);
+		}
 
 		// apply the daemon transformation to gravity direction vector
 		// unit direction vector
 		//Vector forceDirWrld = thisPlg->toWorld( fDir );
 
-		// assume all particles have the same mass
+		// ----------------------------------------------------
+		// Task A1:
+		// Task A2:
+
 		PB_Particle curpart = emitter->getFirstParticle();
+		ArrSdkPB_Particles neighbors;
 		float massParticle = curpart.getMass();
 
-		fDir.scale(massParticle);
+		//threadlocking the call to avoid crashes. (Haven't tested to see if its not needed in RF2015. I use another method, which I'll show you later if needed)
+		threadLock.lock();
+		// the more resolution, the less redius
+		double resolution = 1000.0f * emitter->getParameter<double>("Resolution");
+		float radInf = 20.0f / (10.0f * pow(resolution, 1.0 / 3.0));
+		threadLock.unlock();
 
+		// get velocity from particle
+		Vector parVel;
+		Vector fVel;
+		float vStrength = thisPlg->getParameter<float>("VStrength");
+
+		fDir.scale(massParticle);
 		while (iter.hasNext())
 		{
 			curpart = iter.next();
-
-			curpart.setExternalForce(fDir);
+			curpart.getNeighbors(neighbors, radInf);
+			parVel = curpart.getVelocity();
+			fVel = parVel  * vStrength;
+			
+			curpart.setExternalForce(fDir * neighbors.size() + fVel);
 		}
+		// ----------------------------------------------------
+		// Task A3:
+
+
 	}
 
 	//--------------------------------------------------
@@ -181,7 +224,7 @@ public:
 	virtual void applyForceToBody(Daemon* thisPlg, Object* obj)
 	{
 		//Scene& scene = AppManager::instance()->getCurrentScene();
-		//std::stringstream msg;
+		//stringstream msg;
 
 		//int currFrame = scene.getCurrentFrame();
 		//msg << "Current Frame = " << currFrame;
@@ -243,11 +286,6 @@ public:
 	{
 
 	}
-
-	int timesBeingCalled;
-	int localID;
-
-	static int globalLocalID;
 
 };
 
