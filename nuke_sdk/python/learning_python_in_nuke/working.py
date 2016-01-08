@@ -206,6 +206,93 @@ command = my_menu.addCommand('EdgeMatte', 'nuke.createNode("EdgeMatte")', icon='
 
 
 # -----------------------------------
+# Session 06
+
+# using python built-in modules
+'''
+modules:
+sys
+platform
+time
+colorsys
+copy
+email
+fraction
+os
+os.path
+re
+random
+strings
+stringsIO
+zipfile
+shutil
+'''
+import sys
+import platform
+import time
+import colorsys
+import copy
+import email
+import fraction
+import os
+import os.path
+import re
+import random
+import strings
+import stringsIO
+import zipfile
+import shutil
+
+print sys.platform
+print time.localtime()
+
+myStr = "Hello this is our world"
+print re.split(' ',myStr)
+
+print random.random() + 1
+
+# Handling directories using os module
+import os
+
+write = nuke.createNode('Write')
+write.knob('file').setValue(r'C:\path\to\folder\fileName.ext')
+write.knob('file').setValue()
+
+dir = r'E:\Madoodia\_GitHub\codeLab\nuke_sdk\python\learning_python_in_nuke'
+newdir = r'E:\Madoodia\_GitHub\codeLab\nuke_sdk\python\newDirectory'
+print os.path.isdir(dir)
+print os.path.isfile(dir)
+
+print os.path.dirname(dir)
+print os.path.basename(dir)
+
+print os.getcwd()
+
+try:
+    os.stat(newdir)
+except:
+    os.mkdir(newdir)
+
+try:
+    os.stat(newdir)
+except:
+    os.makedirs(newdir + '/testFolder1/testFolder2')
+
+os.rmdir(newdir)
+
+os.rename('fileName', 'newName')
+
+print os.listdir(dir)
+
+# blank note node: NoOp
+n = nuke.createNode('NoOp')
+k = n.Array_Knob('knobName', 'knobLabel')
+k.setTooltip('this is my tooltip')
+n.addknob(k)
+
+# in panel node
+nuke.createNode('Blur', inpanel=Flase)
+
 # -----------------------------------
 # -----------------------------------
 # -----------------------------------

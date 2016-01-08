@@ -1,0 +1,3 @@
+#! /Applications/Nuke6.3v6/NukeX6.3v6.app/../Nuke6.3v6.app/Contents/MacOS/Nuke6.3v6 -nx
+version 6.3 v6
+add_layer {rgba rgba.beta}

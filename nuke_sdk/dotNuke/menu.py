@@ -33,7 +33,8 @@ nuke.addFormat('1920 1080 0 0 1920 1080 1.0 FullHD')
 # nuke.root().knob('luts').addCurve('nameOfTheLUT', 'formula')    # sLOG
 # formula example: '{pow(10.0, ((t - 0.616596 - 0.03) /0.432699)) - 0.037584}'
 nuke.root().knob('luts').addCurve('pLuts', '{pow(10.0, ((t - 0.616596 - 0.03) /0.432699)) - 0.037584}')
-nuke.root().knob('luts').editCurve('sineLuts', '{sin(t * 2) * 0.5 + 0}')
+nuke.root().knob('luts').addCurve('sineLuts', '{sin(t * 2) * 0.5 + 0}')
+nuke.root().knob('luts').editCurve('sineLuts', '{sin(t * 2) * 2 + 0}')
 
 
 # customise menu items from Nodes toolbar - i.e. Shuffle hotkey 'J':    nuke.menu('Nodes').addCommand('Channel/Shuffle', 'nuke.createNode("Shuffle")', 'j', icon='Shuffle.png')
@@ -56,7 +57,7 @@ nuke.knobDefault('Blur.size', '100' )
 # add menu item to existing Nuke menu - i.e.:    nodeMenu = nuke.menu('Nuke').findItem('Edit/Node').addCommand('myMenuElement',
 											  # 'myPythonScript.myFunction()', 'myHotkey')    
 											  # Modifiers: Shift= shift+, Alt/Option = alt+, Control/Command = ctrl+
-nuke.menu('Nuke').findItem('Edit/Node').addCommand('myMenuElement', 'print "This is a command from Main Menu"', 'ctrl+alt+m')
+nuke.menu('Nuke').findItem('Edit/Node').addCommand('myMenuElement', 'print "This is a command from Main Menu"', 'ctrl+alt+m', icon='target_d.png')
 nuke.menu('Nuke').addCommand('madoodia/Print Me', 'print "This is a command from Main Menu"', 'ctrl+alt+n', icon='target_d.png')
 nuke.menu('Nuke').addCommand('madoodia/Print From Outside', 'outside_scripts.print_words()')
 
@@ -72,7 +73,9 @@ nuke.menu('Nuke').addCommand('madoodia/Print From Outside', 'outside_scripts.pri
 toolbar = nuke.menu('Nodes')
 my_menu = toolbar.addMenu('madoodia', icon='target_d.png')
 
-command = my_menu.addCommand('EdgeMatte', 'nuke.createNode("EdgeMatte")', icon='world_d.png')
+# EdgeMatte is a gizmo command in gizmos folder that appended to path
+command = my_menu.addCommand('Edge Matte', 'nuke.createNode("EdgeMatte")', icon='world_d.png')
+command = my_menu.addCommand('Test Giz', 'nuke.createNode("TestGiz")', icon='target_d.png')
 
 
 
