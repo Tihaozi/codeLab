@@ -20,8 +20,6 @@ MStatus BulgeDeformer::initialize()
 	MStatus status;
 
 	MFnNumericAttribute nAttr;
-	MFnTypedAttribute tAttr;
-
 
 	aBulgeAmount = nAttr.create("bulgeAmount", "bulgeAmount", MFnNumericData::kFloat);
 	nAttr.setKeyable(true);
