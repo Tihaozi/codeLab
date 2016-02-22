@@ -1,0 +1,26 @@
+For setup a project in Visual Studio
+we need these addresses and configs on properties of project:
+
+Configuration: All Configuration
+Platform: Active(x64)
+Configuration Properties > General > Target Extension: .dll
+Configuration Properties > General > Configuration Type: Dynamic Library (.dll)
+Configuration Properties > General > Character Set: Use Unicode Character Set
+Configuration Properties > Linker > General > Output File: $(OutDir)$(TargetName)$(TargetExt)
+Configuration Properties > C/C++ > General > Additional Include Directories: ../../sdk/include;../../sdk/include/private_sdk;
+Configuration Properties > C/C++ > Preprocessor > Preprocessor Definitions: WIN32;_WINDOWS;_USRDLL;_WINDLL;_UNICODE;UNICODE;
+Configuration Properties > Linker > General > Additional Library Directories: ../../sdk/lib
+Configuration Properties > Linker > General > Output File: $(OutDir)\$(ProjectName)_x64_DL.dll
+Configuration Properties > Linker > Input > Additional Dependencies: rfsdk_x64.lib;%(AdditionalDependencies)
+Configuration Properties > Linker > Advanced > Target Machine: MachineX64 (/MACHINE:X64)
+
+
+Configuration Properties > C/C++ > General > Debug Information Format: Program Database (/Zi)
+Configuration Properties > C/C++ > General > Warning Level: Level3 (/W3)
+Configuration Properties > C/C++ > General > SDL Check: Yes (/sdl)
+Configuration Properties > C/C++ > Optimization > Optimization: Maximize Speed (/O2)
+Configuration Properties > C/C++ > Optimization > Enable Intrinsic Functions: No
+Configuration Properties > C/C++ > Code generation > Enable Minimal Rebuild: No (/Gm-)
+Configuration Properties > C/C++ > Code generation > Basic Runtime Check: Default
+Configuration Properties > C/C++ > Code generation > Runtime Library: Multi-threaded DLL (/MD)
+Configuration Properties > Linker > Debugging > Generate Debug Info: Optimize for debugging (/DEBUG)

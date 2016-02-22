@@ -1,3 +1,4 @@
+// Attribute Types
 ////////////////////////////////////////////
 // MFnNumericAttribute
 #include <maya/MFnNumericAttribute.h>
@@ -212,5 +213,174 @@ MDataHandle hChildAttribute = hCompoundAttribute.child(aChildeAttribute1);
 MPlug plugCompoundAttribute(oNode, aMyAttribute);
 MPlug plugChildAttribute1 = plugCompoundAttribute.child(0);
 MPlug plugChildAttribute2 = plugCompoundAttribute.child(aChildeAttribute2);
+
+// -------------------------------------------------------------------------------- //
+// Attribute Options
+////////////////////////////////////////////
+// Output attribute options
+setStorable(false);
+setWritable(false);
+
+////////////////////////////////////////////
+// Other usefull attribute options
+setKeyable(true);
+setChannelBox(true);
+setHidden(true);
+setConnectable(true);
+
+////////////////////////////////////////////
+// Array attributes
+setArray(true);
+
+MFnNumericAttribute nAttr;
+MObject myAttribute = nAttr.create("myAttribute", "myAttribute", MFnNumericData::kFloat);
+nAattr.setArray(true);
+
+// Two different type of array indeces : logical and physical
+node.myAttribute[0] = 1.3
+node.myAttribute[3] = 2.6
+node.myAttribute[7] = 4.1
+node.myAttribute[9] = 2.1
+
+// Logical: 	0	3	7	9
+// physical:	0	1	2	3
+
+// Logical indeces can be sparse
+
+// Data handle iteration of array attributes
+// Ex. 1: Iterating by physical index
+MArrayDataHandle hArrayHandle = data.inputArrayValue(aMyAttribute);
+unsigned int numElements = hArrayHandle.elementCount();
+unsigned int logicalIndex;
+float value;
+for(unsigned int i = 0;i < numElements;++i){
+	hArrayHandle.jumpToArrayElement(i);
+	logicalIndex = hArrayHandle.elementIndex();
+	value = hArrayHandle.inputValue().asFloat();
+}
+// Ex. 2: Iterating with next()
+MArrayDataHandle hArrayHandle = data.inputArrayValue(aMyAttribute);
+unsigned int numElements = hArrayHandle.elementCount();
+if(numElements > 0){
+	hArrayHandle.jumpToArrayElement(0);
+}
+unsigned int logicalIndex;
+float value;
+for(unsigned int i = 0;i < numElements;++i){
+	value = hArrayHandle.inputValue().asFloat();
+	logicalIndex = hArrayHandle.elementIndex();
+	hArrayHandle.next();
+}
+
+// Plug iteration of array attributes
+// Ex. 1: Iterating by physical index
+MPlug plug(oNode, aMyAttribute);
+unsigned int numElements = plug.numElements();
+float value;
+MPlug plugElement;
+for(unsigned int i = 0;i < numElements;++i){
+	plugElement = plug.elementByPhysicalIndex(i);
+	// plugElement = plug[i];
+	value = plugElement.asFloat();
+}
+// Ex. 1: Iterating by logical index
+MPlug plug(oNode, aMyAttribute);
+MIntArray logicalIndices;
+unsigned int numElements = plug.getExistingArrayAttributeIndeces(logicalIndices);
+float value;
+MPlug plugElement;
+for(unsigned int i = 0;i < numElements;++i){
+	plugElement = plug.elementByLogicalIndex(logicalIndices[i]);
+	// plugElement = plug[i];
+	value = plugElement.asFloat();
+}
+// Iterating on a plug by logical index will create a plug if one does not exist at that index
+
+// No way to delete a pug in the API
+// Must use MEL or maya.cmds: removeMultiInstance
+
+// Multidimentional arrays are create by making array attributes
+MFnCompoundAttribute cAttr;
+MFnNumericAttribute nAttr;
+MObject aValueAttribute = nAttr.create("valueAttribute", "valueAttribute", MFnNumericData::kFloat);
+node.setArray(true);
+
+MObject aCompoundAttribute = cAttr.create("compoundAttribute", "compoundAttribute", MFnNumericData::kFloat);
+node.setArray(true);
+cAttr.addChild(aValueAttribute);
+addAttribute(aCompoundAttribute);
+
+node.compoundAttribute[2].valueAttribute[5];
+
+// Array attribute options
+// Disconnect behavior
+setDistanceBehavior(MFnAttribute::kDelete); 	// The Array index will be deleted when disconnected
+setDistanceBehavior(MFnAttribute::kReset);		// The Array value will be reset to its default value when disconnected
+
+// Index matters
+setArray(true);
+setReadable(false);
+setIndexMatters(false);
+cmds.connectAttr("sourceNode.attribte", "node.attribte", nextAvailable=True)
+
+// Data builder
+// Create array indices at runtime
+// Used for output array attributes, attributes that are saved with the default attribute
+//Constructing datahandles for array elements not known until runtime
+setUsesArrayDataBuilder(true);
+
+// Ex. setting an output attibute for each corresponding input attribute
+MStatus MyNode::jumpToElement(MArrayDataHandle& hArray, unsigned int index)
+{
+	MStatus status;
+
+	status = hArray.jumpToElement(index);
+	if(MFAIL(status)){
+		MArrayDataBuilder builder = hArray.builder(&status);
+		CHECK_MSTATUS_AND_RETURN_IT(status);
+		builder.addElement(index, &status);
+		CHECK_MSTATUS_AND_RETURN_IT(status);
+		status = hArray.set(builder);
+		CHECK_MSTATUS_AND_RETURN_IT(status);
+		status = hArray.jumpToElement(index);
+		CHECK_MSTATUS_AND_RETURN_IT(status);
+	}
+	return status;
+}
+
+MArrayDataHandle hInputArrayHandle = data.inputArrayValue(aInputAttibute);
+MArrayDataHandle hOutputArrayHandle = data.outputArrayValue(aOututAttibute);
+unsigned int numElements = hInputArrayHandle.elementCount();
+unsigned int logicalIndex;
+float value;
+for(unsigned int i = 0;i < numElements;++i){
+	hInputArrayHandle.jumpToElement(i);
+	logicalIndex = hInputArrayHandle.elementIndex();
+	value = hInputArrayHandle.inputValue().asFloat();
+	jumpToElement(hOutputArrayHandle, logicalIndex);
+	hOutputArrayHandle.outputValue().asFloat();
+}
+hOutputArrayHandle.setAllClean();
+
+// Array attributes vs. attributes of an array type
+MObject aMultiAttribute = nAttr.create("multiAttribute", "multiAttribute", MFnNumericData::kDouble);
+nAttr.setArray(true);
+
+MFnTypedAttribute tAttr;
+MObject aArrayAttribute = tAttr.create("arrayAttribute", "arrayAttribute", MFnData::kDoubleArray);
+
+/*
+What is the diffeence?
+
+Array type attributes:
+* Good for connecting or passing entire arrays through the DG
+* Faster to read/write
+* Stores every value to disk (more disk space)
+
+Array attributes:
+* Allow editing and keying of individual values
+* Slower to read/write
+* Stores non-default values in blocks to disk (less than space)
+*/
 
 ////////////////////////////////////////////

@@ -21,7 +21,7 @@ class Window(QtGui.QWidget):
 
         # Load logo from URL
         pixmap = QtGui.QPixmap()
-        pixmap.load("../pyblish_pyside/icons/pyblish-white.png")
+        pixmap.load("/icons/pyblish-white.png")
         # pixmap.loadFromData(urllib.urlopen(
         #     "https://gist.githubusercontent.com/mottosso"
         #     "/1443b177e15710ee36e4/raw/07e2db113ab0b438c"

@@ -359,4 +359,10 @@ nuke.knobDefault('Write.afterRender', 'renders.finish()')
 
 
 # -----------------------------------
+
+# Session 08: work with Gizmos
+
+# Icon of Gizmo in Nuke is pentagon
+# Icon of Group in Nuke is hegzagon
+
 # -----------------------------------

@@ -20,6 +20,7 @@
 #include <rf_sdk/sdk/rfsdklibdefs.h>
 #include <rf_sdk/sdk/sdkversion.h>
 #include <rf_sdk/sdk/mutex.h>
+#include <rf_sdk/sdk/object.h>
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -107,6 +108,10 @@ public:
 		Ppty vStrength = Ppty::createPpty("VStrength", 2.0f);
 		plgDesc->addPpty(vStrength);
 		//----------------------------------------------
+		// Task A2: (vector property) ------------------
+		Ppty extraAttr = Ppty::createPpty("ExtraAttr", 1.0f);
+		plgDesc->addPpty(extraAttr);
+		//----------------------------------------------
 
 
 		// list property
@@ -145,26 +150,26 @@ public:
 	{
 		Scene& scene = AppManager::instance()->getCurrentScene();
 
-		float fstrength = thisPlg->getParameter<float>("FStrength");
+		float fStrength = thisPlg->getParameter<float>("FStrength");
 		int   forceType = thisPlg->getParameter<int>("ForceType");
 
 		// Current time
 		float currTime = scene.getCurrentTime();
 
-		float currFStrength = fstrength;
+		float currFStrength = fStrength;
 
 		switch (forceType)
 		{
 		case FORCE_CONST:
-			currFStrength = fstrength;
+			currFStrength = fStrength;
 			break;
 
 		case FORCE_LINEAR_INC:
-			currFStrength = fstrength * currTime;
+			currFStrength = fStrength * currTime;
 			break;
 
 		case FORCE_QUADRATIC_INC:
-			currFStrength = fstrength * currTime * currTime;
+			currFStrength = fStrength * currTime * currTime;
 			break;
 		}
 
@@ -201,17 +206,54 @@ public:
 		float vStrength = thisPlg->getParameter<float>("VStrength");
 
 		fDir.scale(massParticle);
+		//while (iter.hasNext())
+		//{
+		//	curpart.getNeighbors(neighbors, radInf);
+		//	parVel = curpart.getVelocity();
+		//	fVel = parVel  * vStrength;
+		//	
+		//	curpart.setExternalForce(fDir * neighbors.size() + fVel);
+		//	curpart = iter.next();
+		//}
+		// ----------------------------------------------------
+		// Task A3:
+		//Vector direction(0.0f, 0.0f, 0.0f);
+		//Vector intersection;
+		//Vector normal;
+		//float distance;
+		//unsigned int index;
+		//
+		//while (iter.hasNext())
+		//{
+		//	curpart.getNeighbors(neighbors, radInf);
+		//	parVel = curpart.getVelocity();
+		//	fVel = parVel  * vStrength;
+
+		//	Object object = curpart.getNearestObject(direction, USE_SCENE_OBJECTS, intersection, normal, index, distance);
+		//	if(!object.isNull()){
+		//		curpart.setExternalForce(fDir * neighbors.size() / distance + fVel);
+		//	} else {
+		//		curpart.setExternalForce(fDir * neighbors.size() + fVel);
+		//	}
+
+		//	curpart = iter.next();
+		//}
+		// ----------------------------------------------------
+		// Task A4:
+
+		float eAttr = thisPlg->getParameter<float>("ExtraAttr");
+
 		while (iter.hasNext())
 		{
-			curpart = iter.next();
 			curpart.getNeighbors(neighbors, radInf);
 			parVel = curpart.getVelocity();
 			fVel = parVel  * vStrength;
-			
+
 			curpart.setExternalForce(fDir * neighbors.size() + fVel);
+
+			curpart = iter.next();
 		}
-		// ----------------------------------------------------
-		// Task A3:
+
 
 
 	}
